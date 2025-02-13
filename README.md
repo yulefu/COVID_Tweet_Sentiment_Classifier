@@ -197,11 +197,6 @@ To further improve the current ~85% accuracy or build additional functionalities
 
 
 ---
-## Credits
-
-Special thanks to the Hugging Face Transformers and PyTorch communities for their excellent tools, as well as to all researchers whose work contributed to the ideas and methodologies used in this project.
-
----
 
 ## 中文说明
 
@@ -249,10 +244,6 @@ COVID 推文情感分类器使用 PyTorch 和 Hugging Face Transformers 库构�
 - **数据管道：** 使用自定义的 PyTorch `Dataset` 和 `DataLoader` 类。
 - **训练循环：** 包含基于加权 F1 分数的早停机制。
 - **推理：** 提供了 PyTorch 和 ONNX 两种推理方式，便于部署。
-
----
-Here’s the Chinese translation of your README:
-
 ---
 
 ## 项目结构
@@ -403,8 +394,4 @@ print(onnx_predictor.predict("Vaccine distribution is going great!"))
   使用反向翻译或同义词替换等技术来丰富训练数据集。
 
 ---
-## 致谢
 
-特别感谢 Hugging Face Transformers 和 PyTorch 社区提供的优秀工具，以及所有为本项目贡献思想和方法的研究人员。
-
----
