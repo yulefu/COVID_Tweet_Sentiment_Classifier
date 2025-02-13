@@ -1,17 +1,5 @@
 # COVID Tweet Sentiment Classifier
 
-## Table of Contents
-- [Introduction](#introduction)
-- [Overview](#overview)
-- [Project Structure](#project-structure)
-- [Installation](#installation)
-- [Data Preparation](#data-preparation)
-- [Training the Model](#training-the-model)
-- [Inference](#inference)
-- [Exporting to ONNX](#exporting-to-onnx)
-- [Extending and Improving the Model](#extending-and-improving-the-model)
-- [中文说明](#中文说明)
-
 ---
 ## Introduction
 
@@ -76,8 +64,10 @@ COVID_Tweet_Sentiment_Classifier/
 │   ├── model.py                  # Contains the COVIDTweetClassifier class
 │   ├── dataset.py                # Contains the TweetDataset class and data loading function
 │   ├── train.py                  # Training loop and early stopping logic
-│   ├── inference.py              # Inference classes for PyTorch and ONNX pipelines
-│   └── utils.py                  # Utility functions (logging configuration, feature extraction)
+│   ├── predict.py              # Predict classes for PyTorch
+│   ├── evaluate.py                # provide accuracy, precision, recall, and F1 score
+│   ├── export.py                  # Contains a function for exporting the trained model to the ONNX format
+│   └── onnx_predictor.py                  # Predict classes for ONNX
 │
 ├── README.md                     # This README file
 └── requirements.txt              # Python dependencies
@@ -102,83 +92,86 @@ COVID_Tweet_Sentiment_Classifier/
 
 ---
 
-## Data Preparation
+## Setup and Usage
 
-Place your CSV files (`Corona_NLP_train.csv` and `Corona_NLP_test.csv`) in the `data/` folder. The `load_data` function in `src/dataset.py`:
-- Reads the CSV files using pandas.
-- Cleans the tweet text and maps sentiment labels (e.g., “Extremely Negative” to 0).
-- Extracts three handcrafted features from each tweet.
-- Returns a list of tweet texts, a tensor of features, and a list of labels.
+### 1. **Data Preparation**
+The model expects a dataset in CSV format with the following columns:
+- `OriginalTweet`: The tweet text.
+- `Sentiment`: The sentiment label for each tweet.
 
----
+Example of the expected sentiment labels:
+- `Extremely Negative`
+- `Negative`
+- `Neutral`
+- `Positive`
+- `Extremely Positive`
 
-## Training the Model
+The datasets are in the `Corona_NLP_train.csv` and `Corona_NLP_test.csv` files for training and testing.
 
-To train the model, run:
+### 2. **Training the Model**
+
+Run the `train.py` script to train the model. The script will load the training data from `Corona_NLP_train.csv`, preprocess it, and train the model using the BERT embeddings along with handcrafted features.
 
 ```bash
 python src/train.py
 ```
 
-This script:
-- Loads and processes the data.
-- Initializes the BERT-based classifier.
-- Trains the model for a set number of epochs (default is 3 for runtime optimization).
-- Evaluates on the test set after each epoch using the weighted F1 score.
-- Saves the best model checkpoint to `models/covid_model.pth`.
+During training, the model will save the best performing model to `covid_model.pth` based on the F1 score.
 
----
+#### Parameters
+- **Learning rate**: `2e-5` (can be modified inside `train.py`)
+- **Batch size**: `32` for training and `64` for testing
+- **Epochs**: `3` (can be adjusted in `train.py`)
 
-## Inference
+### 3. **Model Prediction**
 
-Two inference pipelines are provided:
+After training, use the `src/predict.py` file to make predictions on new tweets.
 
-### PyTorch Inference
-
-The `TweetPredictor` class in `src/inference.py`:
-- Loads the saved PyTorch model.
-- Preprocesses new tweet text (tokenization and feature extraction).
-- Returns the sentiment label with the highest predicted score.
-
-Example:
+You can use the following code in `src/predict.py` to load the trained model and make predictions:
 
 ```python
-from src.inference import TweetPredictor
+from src.predict import TweetPredictor
 
-predictor = TweetPredictor(model_path='models/covid_model.pth')
+predictor = TweetPredictor(model_path='covid_model.pth')
 print(predictor.predict("Vaccine distribution is going great!"))
 ```
 
-### ONNX Inference
-
-The `ONNXPredictor` class in `src/inference.py`:
-- Loads the ONNX model using ONNX Runtime.
-- Processes the input tweet text similarly.
-- Outputs the sentiment label.
-
-Example:
-
-```python
-from src.inference import ONNXPredictor
-
-onnx_predictor = ONNXPredictor(model_path='models/covid_model.onnx')
-print(onnx_predictor.predict("Vaccine distribution is going great!"))
+#### Example Output:
+```
+Positive
 ```
 
----
+### 4. **Model Evaluation**
 
-## Exporting to ONNX
+To evaluate the model's performance on the test dataset, run the `src/evaluate.py` file. It will load the test data from `Corona_NLP_test.csv`, and calculate various evaluation metrics including accuracy, precision, recall, and F1 score.
 
-After training, you can export the PyTorch model to ONNX format with:
+```bash
+python src/evaluate.py
+```
+
+### 5. **Export Model to ONNX**
+
+If you want to export the model to the ONNX format for inference with other frameworks, you can use the `export_to_onnx` function in `src/export.py`. This will export the trained model to `covid_model.onnx`.
 
 ```python
-# Uncomment and run after training:
-dummy_input = (
-    torch.randint(0, 10000, (1, 128)),    # Simulated token ids
-    torch.ones(1, 128),                  # Attention mask
-    torch.randn(1, 3)                    # Handcrafted features
-)
-torch.onnx.export(model, dummy_input, "models/covid_model.onnx")
+from src.export import export_to_onnx
+
+dummy_input_ids = torch.zeros(1, 128, dtype=torch.int64)
+dummy_attention_mask = torch.zeros(1, 128, dtype=torch.int64)
+dummy_features = torch.zeros(1, 3, dtype=torch.float32)
+
+export_to_onnx(model, (dummy_input_ids, dummy_attention_mask, dummy_features))
+```
+
+### 6. **ONNX Inference**
+
+To make predictions using the exported ONNX model, you can use `ONNXTweetPredictor` in `onnx_predictor.py`. The class uses `onnxruntime` for inference.
+
+```python
+from src.onnx_predictor import ONNXTweetPredictor
+
+onnx_predictor = ONNXTweetPredictor(onnx_model_path='covid_model.onnx')
+print(onnx_predictor.predict("Vaccine distribution is going great!"))
 ```
 
 ---
@@ -206,18 +199,6 @@ Special thanks to the Hugging Face Transformers and PyTorch communities for thei
 ---
 
 ## 中文说明
-
-## 目录
-
-- [概述](#概述)
-- [项目结构](#项目结构)
-- [安装](#安装)
-- [数据准备](#数据准备)
-- [模型训练](#模型训练)
-- [推理](#推理)
-- [导出 ONNX 模型](#导出-onnx-模型)
-- [模型扩展与改进](#模型扩展与改进)
-
 
 ### 引言
 
@@ -292,132 +273,126 @@ COVID_Tweet_Sentiment_Classifier/
 
 ---
 
+Here is the translation of your README into Chinese, keeping English terms like "BERT," "CSV," and others as-is:
+
+---
+
 ## 安装
 
-1. **克隆仓库：**
+1. **克隆代码库：**
 
    ```bash
    git clone https://github.com/yulefu/COVID_Tweet_Sentiment_Classifier.git
    cd COVID_Tweet_Sentiment_Classifier
    ```
 
-2. **创建并激活虚拟环境（可选，但推荐）：**
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # Windows 下使用: venv\Scripts\activate
-   ```
-
-3. **安装依赖包：**
+2. **安装所需的包：**
 
    ```bash
    pip install -r requirements.txt
    ```
 
 ---
+## 设置与使用
 
-## 数据准备
+### 1. **数据准备**
+该模型需要一个CSV格式的数据集，包含以下列：
+- `OriginalTweet`：推文内容。
+- `Sentiment`：每条推文的情感标签。
 
-将 CSV 文件（`Corona_NLP_train.csv` 和 `Corona_NLP_test.csv`）放置于 `data/` 目录中。`src/dataset.py` 中的 `load_data` 函数将：
-- 使用 pandas 读取 CSV 文件；
-- 清洗推文文本，并将情感标签（如“Extremely Negative”映射为 0）转换为数字；
-- 为每条推文提取三个手工特征；
-- 返回推文列表、特征张量以及标签列表。
+示例情感标签：
+- `Extremely Negative`（极度负面）
+- `Negative`（负面）
+- `Neutral`（中立）
+- `Positive`（正面）
+- `Extremely Positive`（极度正面）
 
----
+训练和测试数据集分别保存在 `Corona_NLP_train.csv` 和 `Corona_NLP_test.csv` 文件中。
 
-## 模型训练
+### 2. **训练模型**
 
-运行训练脚本：
+运行 `train.py` 脚本来训练模型。该脚本将从 `Corona_NLP_train.csv` 加载训练数据，进行预处理，并使用BERT嵌入以及手工特征来训练模型。
 
 ```bash
 python src/train.py
 ```
 
-此脚本将：
-- 加载并预处理数据；
-- 初始化基于 BERT 的模型和附加的特征层；
-- 在固定的训练轮数内（默认 3 个 epoch 用于演示优化运行时间）训练模型；
-- 在每个 epoch 后使用加权 F1 分数对测试集进行评估；
-- 将最佳模型（基于 F1 分数提升）保存到 `models/covid_model.pth`。
+在训练过程中，模型将根据F1分数保存表现最好的模型到 `covid_model.pth`。
 
-日志系统配置为显示带时间戳的训练进度更新。
+#### 参数
+- **学习率**：`2e-5`（可以在 `train.py` 中修改）
+- **批次大小**：训练时为 `32`，测试时为 `64`
+- **训练周期**：`3`（可以在 `train.py` 中调整）
 
----
+### 3. **模型预测**
 
-## 推理
+训练完成后，使用 `src/predict.py` 文件对新的推文进行预测。
 
-提供两种推理方式：
-
-### PyTorch 推理
-
-在 `src/inference.py` 中的 `TweetPredictor` 类：
-- 加载保存的 PyTorch 模型；
-- 对新推文进行预处理（包括分词和特征提取）；
-- 根据最高 logits 输出情感标签。
-
-示例代码：
+可以使用以下代码在 `src/predict.py` 中加载训练好的模型并进行预测：
 
 ```python
-from src.inference import TweetPredictor
+from src.predict import TweetPredictor
 
-predictor = TweetPredictor(model_path='models/covid_model.pth')
+predictor = TweetPredictor(model_path='covid_model.pth')
 print(predictor.predict("Vaccine distribution is going great!"))
 ```
 
-### ONNX 推理
+#### 示例输出：
+```
+Positive
+```
 
-在 `src/inference.py` 中的 `ONNXPredictor` 类：
-- 使用 ONNX Runtime 加载 ONNX 模型；
-- 以类似方式处理文本；
-- 输出预测情感标签（使用 NumPy 数组）。
+### 4. **模型评估**
 
-示例代码：
+要评估模型在测试数据集上的表现，运行 `src/evaluate.py` 文件。该文件将从 `Corona_NLP_test.csv` 加载测试数据，并计算包括准确率、精确度、召回率和F1分数等评估指标。
+
+```bash
+python src/evaluate.py
+```
+
+### 5. **导出模型为ONNX格式**
+
+如果你想将模型导出为ONNX格式，以便使用其他框架进行推理，可以使用 `src/export.py` 中的 `export_to_onnx` 函数。这样可以将训练好的模型导出为 `covid_model.onnx`。
 
 ```python
-from src.inference import ONNXPredictor
+from src.export import export_to_onnx
 
-onnx_predictor = ONNXPredictor(model_path='models/covid_model.onnx')
+dummy_input_ids = torch.zeros(1, 128, dtype=torch.int64)
+dummy_attention_mask = torch.zeros(1, 128, dtype=torch.int64)
+dummy_features = torch.zeros(1, 3, dtype=torch.float32)
+
+export_to_onnx(model, (dummy_input_ids, dummy_attention_mask, dummy_features))
+```
+
+### 6. **ONNX推理**
+
+要使用导出的ONNX模型进行预测，可以在 `onnx_predictor.py` 中使用 `ONNXTweetPredictor` 类。该类使用 `onnxruntime` 进行推理。
+
+```python
+from src.onnx_predictor import ONNXTweetPredictor
+
+onnx_predictor = ONNXTweetPredictor(onnx_model_path='covid_model.onnx')
 print(onnx_predictor.predict("Vaccine distribution is going great!"))
 ```
 
 ---
 
-## 导出 ONNX 模型
+## 扩展与改进模型
 
-训练完成后，你可以将 PyTorch 模型导出为 ONNX 格式以便在其他平台上进行快速推理。训练脚本中提供了以下注释代码片段：
-
-```python
-# 导出到 ONNX (训练后运行)
-dummy_input = (
-    torch.randint(0, 10000, (1, 128)),    # 模拟 token ids
-    torch.ones(1, 128),                  # 注意力 mask
-    torch.randn(1, 3)                    # 手工特征
-)
-torch.onnx.export(model, dummy_input, "models/covid_model.onnx")
-```
-
-取消注释并运行此代码即可生成 ONNX 文件。
-
----
-
-## 模型扩展与改进
-
-目前模型准确率约为 85%。你可以通过以下方向进一步改进模型：
-- **更好的预训练模型：**  
-  尝试使用专门针对推文预训练的模型，如 [BERTweet](https://github.com/VinAIResearch/BERTweet) 或 [COVID-Twitter-BERT](https://github.com/cdqa-suite/covid-twitter-bert)。
-- **附加特征：**  
-  增加更多手工特征（例如情感词典得分、表情符号解释、用户元数据）。
+要进一步提升当前约85%的准确率或构建其他功能，可以考虑：
+- **使用领域特定的预训练模型：**  
+  尝试使用如 [BERTweet](https://github.com/VinAIResearch/BERTweet) 或 [COVID-Twitter-BERT](https://github.com/cdqa-suite/covid-twitter-bert) 等模型。
+- **增强手工特征：**  
+  添加更多特征（例如，情感词典分数、表情符号解释、用户元数据）。
 - **多任务学习：**  
-  扩展模型以同时执行多个任务（如主题检测、讽刺识别）。
-- **应用开发：**  
-  构建基于 Flask 或 FastAPI 的 Web 应用，实现实时情感分析。
+  扩展模型以执行其他任务（例如，话题检测、讽刺识别）。
+- **部署：**  
+  使用 Flask 或 FastAPI 创建一个实时情感分析的Web应用。
 - **数据增强：**  
-  利用反向翻译或同义词替换扩充训练数据。
+  使用回译或同义词替换等技术来丰富训练数据集。
 
 ---
 
-## Credits
+## 致谢
 
-特别感谢 Hugging Face Transformers 和 PyTorch 社区的所有贡献者，以及所有为此项目提供数据和文献支持的研究者们。
-
+特别感谢 Hugging Face Transformers 和 PyTorch 社区提供的优秀工具，以及所有为本项目贡献思想和方法的研究者们。
