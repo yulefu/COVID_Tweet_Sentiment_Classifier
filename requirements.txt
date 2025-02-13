@@ -1,7 +1,0 @@
-torch
-transformers
-scikit-learn
-pandas
-onnxruntime
-onnx
-numpy
