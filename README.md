@@ -75,7 +75,12 @@ COVID_Tweet_Sentiment_Classifier/
 
 ## Installation
 
-Make sure the Python verison is 3.10.12.
+Make sure the Python verison is 3.10.12. Also, please ensure you have the correct CUDA and cuDNN installed. We are using CUDA version 12.1, and cuDNN Version 90100. 
+
+
+Download CUDA from NVIDIA’s official website and install it.
+
+Download cuDNN from NVIDIA Developer and install it.
 
 1. **Clone the repository:**
 
@@ -277,6 +282,12 @@ COVID_Tweet_Sentiment_Classifier/
 ---
 
 ## 安装
+
+请确保 Python 版本为 3.10.12。此外，请确保您已正确安装 CUDA 和 cuDNN。我们使用的是 CUDA 版本 12.1 和 cuDNN 版本 90100。  
+
+从 NVIDIA 官方网站下载 CUDA 并安装。  
+
+从 NVIDIA Developer 下载 cuDNN 并安装。
 
 1. **克隆仓库：**
 
