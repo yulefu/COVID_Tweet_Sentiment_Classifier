@@ -129,7 +129,7 @@ Download cuDNN from NVIDIA Developer and install it.
      ```bash
      jupyter notebook
      ```
-  3. Open the notebook in your browser and execute the cells.
+  3. Open the yulefu_nlp.ipynb notebook in your browser and execute the cells.
  - **Or, you can follow the instructions below to run specific .py files:**
 
 ---
@@ -361,7 +361,7 @@ python --version
      ```bash
      jupyter notebook
      ```
-  3. 在浏览器中打开笔记本并执行单元格。
+  3. 在浏览器中打开 yulefu_nlp.ipynb 笔记本并执行单元格。
   
 - **或者，你也可以按照以下步骤运行特定的 `.py` 文件：**
 
