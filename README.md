@@ -75,6 +75,8 @@ COVID_Tweet_Sentiment_Classifier/
 
 ## Installation
 
+Make sure the Python verison is 3.10.12.
+
 1. **Clone the repository:**
 
    ```bash
