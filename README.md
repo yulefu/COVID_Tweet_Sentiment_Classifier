@@ -52,9 +52,8 @@ Key points:
 ```
 COVID_Tweet_Sentiment_Classifier/
 │
-├── data/
-│   ├── Corona_NLP_train.csv      # Training dataset CSV
-│   └── Corona_NLP_test.csv       # Testing dataset CSV
+├── Corona_NLP_train.csv      # Training dataset CSV
+└── Corona_NLP_test.csv       # Testing dataset CSV
 │
 ├── models/
 │   ├── covid_model.pth           # Saved PyTorch model checkpoint
@@ -252,9 +251,8 @@ COVID 推文情感分类器使用 PyTorch 和 Hugging Face Transformers 库构�
 ```
 COVID_Tweet_Sentiment_Classifier/
 │
-├── data/
-│   ├── Corona_NLP_train.csv      # 训练数据 CSV 文件
-│   └── Corona_NLP_test.csv       # 测试数据 CSV 文件
+├── Corona_NLP_train.csv      # 训练数据 CSV 文件
+└── Corona_NLP_test.csv       # 测试数据 CSV 文件
 │
 ├── models/
 │   ├── covid_model.pth           # 保存的 PyTorch 模型检查点
