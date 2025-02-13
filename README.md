@@ -75,25 +75,62 @@ COVID_Tweet_Sentiment_Classifier/
 
 ## Installation
 
-Make sure the Python verison is 3.10.12. Also, please ensure you have the correct CUDA and cuDNN installed. We are using CUDA version 12.1, and cuDNN Version 90100. 
+Ensure you have Python verison 3.10.12 installed. Check by running:
 
+``` bash
+python --version
+```
+If needed, download and install the latest version from python.org.
+
+
+## **Step 2: Install Virtual Environment (Recommended)**
+To avoid conflicts with existing packages, create a virtual environment:
+
+1. Open a terminal (Command Prompt / PowerShell / Terminal).
+2. Navigate to the folder where you saved the project:
+   ```bash
+   cd path/to/project
+   ```
+3. Create a virtual environment:
+   ```bash
+   python -m venv myenv
+   ```
+4. Activate the environment:
+   - On Windows:
+     ```bash
+     myenv\Scripts\activate
+     ```
+   - On macOS/Linux:
+     ```bash
+     source myenv/bin/activate
+     ```
+
+## **Step 3: Install Required Dependencies**
+- The project contains a `requirements.txt` file, install the necessary packages:
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+Also, please ensure you have the correct CUDA and cuDNN installed. We are using CUDA version 12.1, and cuDNN Version 90100. 
 
 Download CUDA from NVIDIA’s official website and install it.
 
 Download cuDNN from NVIDIA Developer and install it.
 
-1. **Clone the repository:**
 
-   ```bash
-   git clone https://github.com/yulefu/COVID_Tweet_Sentiment_Classifier.git
-   cd COVID_Tweet_Sentiment_Classifier
-   ```
+## **Step 4: Running the Code**
 
-2. **Install the required packages:**
-
-   ```bash
-   pip install -r requirements.txt
-   ```
+- **If you want to run the entire Jupyter Notebook (`.ipynb`):**
+  1. Install Jupyter if not installed:
+     ```bash
+     pip install jupyter
+     ```
+  2. Run Jupyter Notebook:
+     ```bash
+     jupyter notebook
+     ```
+  3. Open the notebook in your browser and execute the cells.
+ - **Or, you can follow the instructions below to run specific .py files:**
 
 ---
 
@@ -270,28 +307,63 @@ COVID_Tweet_Sentiment_Classifier/
 └── requirements.txt              # Python 依赖项
 ```
 
----
-
 ## 安装
 
-请确保 Python 版本为 3.10.12。此外，请确保您已正确安装 CUDA 和 cuDNN。我们使用的是 CUDA 版本 12.1 和 cuDNN 版本 90100。  
+确保你已安装 Python 版本 3.10.12。可以通过运行以下命令检查：
 
-从 NVIDIA 官方网站下载 CUDA 并安装。  
+```bash
+python --version
+```
+如果需要，前往 python.org 下载并安装最新版本。
 
-从 NVIDIA Developer 下载 cuDNN 并安装。
+## **步骤 2：安装虚拟环境（推荐）**
+为了避免与现有包发生冲突，创建一个虚拟环境：
 
-1. **克隆仓库：**
-
+1. 打开终端（命令提示符 / PowerShell / 终端）。
+2. 导航到你保存项目的文件夹：
    ```bash
-   git clone https://github.com/yulefu/COVID_Tweet_Sentiment_Classifier.git
-   cd COVID_Tweet_Sentiment_Classifier
+   cd path/to/project
    ```
-
-2. **安装所需的包：**
-
+3. 创建虚拟环境：
    ```bash
-   pip install -r requirements.txt
+   python -m venv myenv
    ```
+4. 激活环境：
+   - 在 Windows 上：
+     ```bash
+     myenv\Scripts\activate
+     ```
+   - 在 macOS/Linux 上：
+     ```bash
+     source myenv/bin/activate
+     ```
+
+## **步骤 3：安装所需依赖**
+- 项目中包含一个 `requirements.txt` 文件，安装所需的包：
+  ```bash
+  pip install -r requirements.txt
+  ```
+
+另外，请确保你已安装正确版本的 CUDA 和 cuDNN。我们使用的是 CUDA 版本 12.1，cuDNN 版本 90100。
+
+从 NVIDIA 官方网站下载并安装 CUDA。
+
+从 NVIDIA 开发者网站下载并安装 cuDNN。
+
+## **步骤 4：运行代码**
+
+- **如果你想运行整个 Jupyter Notebook（`.ipynb`）：**
+  1. 如果尚未安装 Jupyter，请安装：
+     ```bash
+     pip install jupyter
+     ```
+  2. 运行 Jupyter Notebook：
+     ```bash
+     jupyter notebook
+     ```
+  3. 在浏览器中打开笔记本并执行单元格。
+  
+- **或者，你也可以按照以下步骤运行特定的 `.py` 文件：**
 
 ---
 
