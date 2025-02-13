@@ -62,10 +62,10 @@ COVID_Tweet_Sentiment_Classifier/
 ├── model.py                  # Contains the COVIDTweetClassifier class
 ├── dataset.py                # Contains the TweetDataset class and data loading function
 ├── train.py                  # Training loop and early stopping logic
-├── predict.py              # Predict classes for PyTorch
-├── evaluate.py                # provide accuracy, precision, recall, and F1 score
-├── export.py                  # Contains a function for exporting the trained model to the ONNX format
-└── onnx_predictor.py             # Predict classes for ONNX
+├── predict.py                # Predict classes for PyTorch
+├── evaluate.py               # provide accuracy, precision, recall, and F1 score
+├── export.py                 # Contains a function for exporting the trained model to the ONNX format
+└── onnx_predictor.py         # Predict classes for ONNX
 │
 ├── README.md                     # This README file
 └── requirements.txt              # Python dependencies
