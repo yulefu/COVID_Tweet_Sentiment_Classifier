@@ -40,8 +40,8 @@ For training, I use **CrossEntropyLoss**, which computes the difference between 
 $$\text{Loss} = - \sum_{i} y_i \log(\hat{y}_i)$$
 
 where:  
-- \( y_i \) is the true label, and  
-- \( \hat{y}_i \) is the predicted probability for class \( i \).
+- $y_i$ is the true label, and  
+- $\hat{y}_i$ is the predicted probability for class $i$.
 
 Finally, the model is trained using gradient descent via the **AdamW** optimizer. This optimizer computes the gradient of the loss and updates the model’s weights in the direction that minimizes the loss.
 
@@ -246,8 +246,8 @@ Special thanks to the Hugging Face Transformers and PyTorch communities for thei
 $$\text{Loss} = - \sum_{i} y_i \log(\hat{y}_i)$$
 
 其中：  
-- \( y_i \) 为真实标签；  
-- \( \hat{y}_i \) 为类别 \( i \) 的预测概率。
+- $y_i$ 为真实标签；  
+- $\hat{y}_i$ 为类别 $i$ 的预测概率。
 
 最后，通过 **AdamW 优化器** 使用梯度下降法训练模型。该优化器通过计算损失的梯度并更新模型权重以最小化损失。
 
@@ -297,7 +297,7 @@ COVID_Tweet_Sentiment_Classifier/
 1. **克隆仓库：**
 
    ```bash
-   git clone https://github.com/your-username/COVID_Tweet_Sentiment_Classifier.git
+   git clone https://github.com/yulefu/COVID_Tweet_Sentiment_Classifier.git
    cd COVID_Tweet_Sentiment_Classifier
    ```
 
