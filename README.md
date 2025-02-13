@@ -90,7 +90,7 @@ COVID_Tweet_Sentiment_Classifier/
 1. **Clone the repository:**
 
    ```bash
-   git clone https://github.com/your-username/COVID_Tweet_Sentiment_Classifier.git
+   git clone https://github.com/yulefu/COVID_Tweet_Sentiment_Classifier.git
    cd COVID_Tweet_Sentiment_Classifier
    ```
 
