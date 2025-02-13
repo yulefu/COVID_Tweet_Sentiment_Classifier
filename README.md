@@ -94,14 +94,7 @@ COVID_Tweet_Sentiment_Classifier/
    cd COVID_Tweet_Sentiment_Classifier
    ```
 
-2. **Create and activate a virtual environment (optional but recommended):**
-
-   ```bash
-   python -m venv venv
-   source venv/bin/activate      # On Windows use: venv\Scripts\activate
-   ```
-
-3. **Install the required packages:**
+2. **Install the required packages:**
 
    ```bash
    pip install -r requirements.txt
